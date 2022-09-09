@@ -6,13 +6,13 @@ NodeJS calculator API that allows
    * MULTIPLY
    * DIVIDE
    
-## Run
+## Run 🏃🏽‍♀️
   
   -> npm i 
   -> npm run start 
   -> navigate to 'http://localhost:8080/calculator/add?values=1,2'
   
-## TEST
+## TEST 🧪
 
   -> npm i 
   -> npm run test
