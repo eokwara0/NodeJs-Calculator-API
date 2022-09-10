@@ -1,6 +1,7 @@
 import { Operations } from './interface'
 import { colors } from './interface';
 
+
 export class Handler implements Operations{
 
     private query   : object | any  ; 

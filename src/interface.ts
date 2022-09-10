@@ -1,3 +1,5 @@
+import axios from "axios";
+
 export  type Operations = {
     add( req ? : any , res ? : any) : any ;
     sub( req ? : any , res ? : any ) : any ;
@@ -20,4 +22,18 @@ export const colors = {
     cyan: "\x1b[36m",
     white: "\x1b[37m",
     reset: '\x1b[0m'
+}
+
+export async function result(url: string) {
+
+    try {
+        const data = await axios.get(url);
+        return data;
+    } catch (err) {
+        if (axios.isAxiosError(err)) {
+            return JSON.stringify(err);
+        }
+    }
+
+
 }
