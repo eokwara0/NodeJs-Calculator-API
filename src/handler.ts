@@ -1,7 +1,12 @@
 import { Operations } from './interface'
+import { colors } from './interface';
 
 export class Handler implements Operations{
 
+    private query   : object | any  ; 
+    private keys     : string [] | any ;
+    private isvalid : boolean | any;
+    private nums    : number[] | any  ;
     constructor(){
 
     }
@@ -11,8 +16,9 @@ export class Handler implements Operations{
      * @param url url of the query 
      * @returns a list of all the numbers  
      */
-    static extract = ( url : string) : number[] =>{ 
-        return url.split(',').map(e => Number.parseInt(e)).filter( e => !isNaN(e))
+    static extract = ( url : string ) : number[] => {
+        const nums = url.match(/(\d{1,})(?!\w+)/gi)
+        return nums === null ? [] : nums.map( ( el ) => Number.parseInt( el ) )
     }
 
     /**
@@ -22,17 +28,38 @@ export class Handler implements Operations{
      */
     static error( res : any ) {
 
-        console.log("\x1b[31m" + " [ ERROR ] " + "\x1b[0m" + " [ INVALID QUERY ]" )
-        res.status(404).end("<code> [ error ] :: [ Invalid request ] </code>")
+        console.log(` ${ colors.red + colors.bright } [ ERROR ] ${ colors.reset } [ INVALID QUERY ] ` )
+        res.status(404).send("<code> [ error ] :: [ Invalid request ] </code>")
+
+    }
+
+    static success( res : any , answer : number ){
+
+        console.log( ` ${ colors.green + colors.bright } [ SUCCESSFUL REQUEST ] ${ colors.reset} [ ${ answer } ]`)
+        res.send( `<code>${answer}</code>`)
 
     }
 
 
     add() {
         return ( req ? :  any , res ? : any ) =>{
-                const queryData : any  = req.query.values ? req.query.values : 0 ;
-                if(queryData === 0) Handler.error(res)
-                else res.send(`<code>${ Handler.extract(queryData).reduce( ( a, b ) => a + b)}</code>`);
+
+            this.query = ( req.query as object )
+            this.keys   = Object.keys( this.query )
+            this.isvalid = (  this.keys.length > 0 && this.keys.includes( "values" ) )
+
+            
+            if ( !this.isvalid) {
+
+                Handler.error( res )
+
+            }else{
+
+               this.nums = Handler.extract( ( this.query as any ).values )
+               this.nums.length == 0 ? Handler.error( res ) : Handler.success( res , this.nums.reduce( ( a : number , b : number  ) => a + b ) ) 
+
+
+            }
         }
         
             
@@ -40,26 +67,65 @@ export class Handler implements Operations{
     }
     sub() {
         return ( req ? : any , res ? : any) => {
-                const queryData : any  = req.query.values ? req.query.values : 0 ;
-                if(queryData === 0) Handler.error( res ) 
-                else res.send(`<code>${Handler.extract(queryData).reduce( ( a, b ) => a - b )}</code>`)
+            this.query = ( req.query as object )
+            this.keys   = Object.keys( this.query )
+            this.isvalid = (  this.keys.length > 0 && this.keys.includes( "values" ) )
+
+            
+            if ( !this.isvalid) {
+
+                Handler.error( res )
+
+            }else{
+
+               this.nums = Handler.extract( ( this.query as any ).values )
+               this.nums.length == 0 ? Handler.error( res ) : Handler.success( res , this.nums.reduce( ( a : number , b : number  ) => a - b ) ) 
+
+
+            }
         }
     }
     mul() {
 
         return ( req ?: any , res ? : any) => {
-                const queryData : any  = req.query.values ? req.query.values : 0 ;
-                if( queryData === 0 ) Handler.error( res ) 
-                else res.send( `<code>${ Handler.extract(queryData).reduce((a , b) => a * b )}</code>` )
+            this.query = ( req.query as object )
+            this.keys   = Object.keys( this.query )
+            this.isvalid = (  this.keys.length > 0 && this.keys.includes( "values" ) )
+
+            
+            if ( !this.isvalid) {
+
+                Handler.error( res )
+
+            }else{
+
+               this.nums = Handler.extract( ( this.query as any ).values )
+               this.nums.length == 0 ? Handler.error( res ) : Handler.success( res , this.nums.reduce( ( a : number , b : number  ) => a * b ) ) 
+
+
+            }
         }
             
     }
     div() {
 
         return ( req ?: any , res ? : any) => {
-                const queryData : any  = req.query.values ? req.query.values : 0 ;
-                if( queryData === 0 ) Handler.error( res ) 
-                else res.send( `<code>${ Handler.extract(queryData).reduce((a , b) => a / b )}</code>` )
+            this.query = ( req.query as object )
+            this.keys   = Object.keys( this.query )
+            this.isvalid = (  this.keys.length > 0 && this.keys.includes( "values" ) )
+
+            
+            if ( !this.isvalid) {
+
+                Handler.error( res )
+
+            }else{
+
+               this.nums = Handler.extract( ( this.query as any ).values )
+               this.nums.length == 0 ? Handler.error( res ) : Handler.success( res , this.nums.reduce( ( a : number , b : number  ) => a / b ) ) 
+
+
+            }
         }
     }
 

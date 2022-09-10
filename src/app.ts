@@ -2,6 +2,7 @@ import { log } from 'console';
 import express from 'express';
 import { Server, ServerResponse } from 'http';
 import { controller_ } from './controller';
+import  { colors } from  "./interface"
 
 
 
@@ -54,7 +55,7 @@ export class App {
     }
 
     log(){
-        console.log(`\x1b[36m [ SERVER STARTED ] \x1b[0m => http://locahost:${this.PORT}/calculator/<command>?values=1,2,4,5,5,`);
+        console.log(` ${ colors.cyan + colors.bright } [ SERVER STARTED ] ${ colors.reset} => http://locahost:${this.PORT}/calculator/<command>?values=1,2,4,5,5,`);
     }
 
     /**

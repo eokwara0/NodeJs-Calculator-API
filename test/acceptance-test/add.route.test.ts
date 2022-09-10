@@ -43,3 +43,23 @@ describe( " valid add request " , () => {
         expect( info.data ).toEqual( "<code>6</code>")
 })
 })
+
+describe( " test missing values  " , () => {
+    test(" Adding 1 + 3 = 4  ", async () => {
+        const data : AxiosResponse<any, any> | undefined | string = await result("http://localhost:8080/calculator/add?values=1,,3")
+        const info = (data as AxiosResponse<any, any> )  ;
+        
+        expect( info.status ).toEqual( 200 )
+        expect( info.statusText ).toEqual("OK") ;
+        expect( info.data ).toEqual( "<code>4</code>")
+})
+})
+
+describe( " Invalid values " , () => {
+    test(" Adding one + two  ", async () => {
+        const data  = await result("http://localhost:8080/calculator/add?values=one,two")
+        const info = JSON.parse(data as string );
+        expect( info.status ).toEqual( 404 )
+        expect( info.message ).toEqual( "Request failed with status code 404")
+})
+})
